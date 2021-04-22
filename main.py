@@ -2,21 +2,25 @@
 # uvicorn main:app --reload
 
 from typing import Optional
-import models
+import db_models
 import yfinance as yf
 from fastapi import FastAPI, Request, Depends, BackgroundTasks
 from fastapi.templating import Jinja2Templates
 from database import SessionLocal, engine
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
-from models import Stock
+from db_models import Stock
 
 app = FastAPI()
 # Create the db (see database.py)
-models.Base.metadata.create_all(bind=engine)
+db_models.Base.metadata.create_all(bind=engine)
 
 
 def get_db():
+    """
+    Ensure that a session can open properly if not it closes
+    :return: the content of the session
+    """
     try:
         db = SessionLocal()
         # read as return (which not used so we are not exiting the function)
@@ -30,10 +34,12 @@ def get_db():
 templates = Jinja2Templates(directory="templates")
 
 
+# Defining Model
 class StockRequest(BaseModel):
     symbol: str
 
 
+# Defining Routes/Controllers
 @app.get("/")
 def home(request: Request, forward_pe=None, dividend_yield=None, ma50=None, ma200=None, db: Session = Depends(get_db)):
     """
@@ -41,7 +47,7 @@ def home(request: Request, forward_pe=None, dividend_yield=None, ma50=None, ma20
 
     """
     stocks = db.query(Stock)
-
+    # Filters
     if forward_pe:
         stocks = stocks.filter(Stock.forward_pe < forward_pe)
 
@@ -65,6 +71,11 @@ def home(request: Request, forward_pe=None, dividend_yield=None, ma50=None, ma20
 
 
 def fetch_stock_data(id: int):
+    """
+    Fetch data from yahoo finance
+    :param id: Id corresponding to the symbol entered
+    :return: data_info from yahoo finance
+    """
     db = SessionLocal()
     stock = db.query(Stock).filter(Stock.id == id).first()
 

@@ -29,33 +29,36 @@ $(document).ready(function() {
 });
 </script>
 
-<h2>Filters</h2>
+<h3 style="font-size:30px; margin-bottom: 25px;">Filters</h3>
 
-<form method="get">
+<form method="get" style="margin-bottom: 35px">
 
 <div class="ui input">
   <input name="forward_pe" type="text" placeholder="Max Forward P/E" value="{{ forward_pe or '' }}">
 </div>
 
-<div class="ui input">
+<div class="ui input" style="margin-left: 25px;">
   <input name="dividend_yield" type="text" placeholder="Max Dividend Yield" value="{{ dividend_yield or '' }}">
 </div>
 
 <div class="ui checkbox">
   <input name="ma50" type="checkbox" {% if ma50 %}checked="checked"{% endif %}>
-  <label>Above 50 Day MA</label>
+  <label style="margin-left: 25px;">Above 50 Day MA</label>
 </div>
 
 <div class="ui checkbox">
   <input name="ma200" type="checkbox" {% if ma200 %}checked="checked"{% endif %}>
-  <label>Above 200 Day MA</label>
+  <label style="margin-left: 25px;">Above 200 Day MA</label>
 </div>
 
-<button type="submit" class="ui button primary">Filter</button>
+<button type="submit" class="ui button secondary" style="margin-left: 25px;">Filter</button>
 
 </form>
-
-<button id="add_symbol" class="ui button secondary">Add Symbols</button>
+<hr style="height:2px;border-width:0;color:gray;background-color:gray">
+<h4 style="font-size:30px; margin-top: 25px;">Add stock</h4>
+<button id="add_symbol" class="ui button secondary" style="margin-top: 15px; margin-bottom: 25px;">
+    Add Stocks
+</button>
 
 
 <table class="ui celled table">
