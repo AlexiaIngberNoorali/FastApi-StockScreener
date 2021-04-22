@@ -19,13 +19,13 @@ db_models.Base.metadata.create_all(bind=engine)
 def get_db():
     """
     Ensure that a session can open properly if not it closes
-    :return: the content of the session
+    :return: content of db session
     """
     try:
         db = SessionLocal()
         # read as return (which not used so we are not exiting the function)
         yield db
-    # finally executed wheter the try is executed or not (opposite to except)
+    # <finally> executed wheter the try is executed or not (opposite to except)
     finally:
         db.close()
 
@@ -47,6 +47,7 @@ def home(request: Request, forward_pe=None, dividend_yield=None, ma50=None, ma20
 
     """
     stocks = db.query(Stock)
+
     # Filters
     if forward_pe:
         stocks = stocks.filter(Stock.forward_pe < forward_pe)
